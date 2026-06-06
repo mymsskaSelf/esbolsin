@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CATEGORIES } from './mockData';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function App() {
   const [products, setProducts] = useState([]);
@@ -16,14 +17,14 @@ export default function App() {
   });
 
   const loadProducts = () => {
-    fetch('http://localhost:5000/api/products')
+    fetch(`${API_URL}/api/products`)
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => console.error("Ошибка загрузки товаров:", err));
   };
 
   const loadOrders = () => {
-    fetch('http://localhost:5000/api/admin/orders')
+    fetch(`${API_URL}/api/admin/orders`)
       .then(res => res.json())
       .then(data => setOrders(data))
       .catch(err => console.error("Ошибка загрузки заказов:", err));
@@ -60,7 +61,7 @@ export default function App() {
 
     const quantityToAddValue = Number(input);
 
-    fetch('http://localhost:5000/api/admin/products/update-stock', {
+    fetch(`${API_URL}/api/admin/products/update-stock`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
@@ -83,7 +84,7 @@ export default function App() {
 
   // Смена статуса конкретного заказа
   const handleUpdateStatus = (orderId, newStatus) => {
-    fetch(`http://localhost:5000/api/admin/orders/${orderId}/status`, {
+    fetch(`${API_URL}/api/admin/orders/${orderId}/status`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: newStatus })
@@ -105,7 +106,7 @@ export default function App() {
       return;
     }
 
-    fetch(`http://localhost:5000/api/admin/orders/${orderId}`, {
+    fetch(`${API_URL}/api/admin/orders/${orderId}`, {
       method: 'DELETE'
     })
     .then(res => res.json())
@@ -126,7 +127,7 @@ export default function App() {
       return;
     }
 
-    fetch('http://localhost:5000/api/admin/orders', {
+    fetch(`${API_URL}/api/admin/orders`, {
       method: 'DELETE'
     })
     .then(res => res.json())
@@ -156,7 +157,7 @@ export default function App() {
       }))
     };
 
-    fetch('http://localhost:5000/api/orders', {
+    fetch(`${API_URL}/api/orders`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(orderData)
